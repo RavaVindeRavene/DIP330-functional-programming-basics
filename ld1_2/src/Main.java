@@ -15,10 +15,10 @@ public class Main {
         return LongStream.rangeClosed(2, (long)Math.sqrt(n)).reduce(1, (sum, nextdiv)->
                 n%nextdiv==0? sum+nextdiv+(n/nextdiv): sum )==n;
     }
-    public static List<Integer> divisors(int n) {
-        List<Integer> divisors = new ArrayList<Integer>();
+    public static Set<Integer> divisors(int n) {
+
         Stream<Integer> numberlist=Stream.iterate(1,possiblediv->possiblediv+1).limit(n-1);
-        divisors=numberlist. filter(nextdiv->n%nextdiv==0).collect(Collectors.toList());
+        Set<Integer> divisors =numberlist. filter(nextdiv->n%nextdiv==0).collect(Collectors.toSet());
 
         return divisors;
     }
