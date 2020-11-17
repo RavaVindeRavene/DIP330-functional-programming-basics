@@ -125,14 +125,27 @@
 
 ;; 14. Implement the filtering function
 (defn my-filter [p xs]
-  nil)
+  (when (seq xs)
+    (if (p (first xs))
+        (cons (first xs)
+          (my-filter p (next xs)))
+    ;;else:
+    (my-filter p (next xs))
+    )
+  )
+)
 
 (assert (= '(1 3 5)
            (my-filter odd? '(1 2 3 4 5))))
 
 ;; 15. Implement the mapping function
-(defn my-map [f xs]
-  nil)
+(defn my-map [m xs]
+  (when (seq xs)
+    (cons (m (first xs))
+      (my-map m (next xs))
+    )
+  )
+)
 
 (assert (= '(2 3 4 5 6)
            (my-map inc '(1 2 3 4 5))))
