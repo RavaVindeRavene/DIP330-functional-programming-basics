@@ -26,7 +26,7 @@
 
   ; Create a csv string of customer names in brackets "[]" by using (clojure.string/join ...)
   (let [customers (:customers mall)
-        names (clojure.string/join "," (map :name customers))]
+        names (str \[ (clojure.string/join "," (map :name customers))\])]
 
     (is (= names "[Joe,Steven,Patrick,Diana,Chris,Kathy,Alice,Andrew,Martin,Amy]"))))
 
