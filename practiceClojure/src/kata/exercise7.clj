@@ -5,9 +5,13 @@
 (testing "Average Age"
 
   ; Calculate the average of customer ages by using your own (avg ...)
-  ;; Don't forget about (apply ...)
+  ;; Don't forget about (apply ...)\
+
+  (defn my-age-avg [xs]
+    ( / (reduce + (seq (map :age xs))) (count (map :age xs)) )
+    )
   (let [customers (:customers mall)
-        avg-age   ( / (reduce + (seq (map :age customers))) (count (map :age customers)) ) ]
+        avg-age   (apply my-age-avg [customers]) ]
 
     (is (= avg-age (rationalize 28.7)))))
 
@@ -16,6 +20,10 @@
 
   ; Calculate the sum of the prices for all the items in all shops by using (flatten ...)
   ;; Don't forget about (apply ...)
-  (let [total -1]
+  (let [shops (:shops mall)
+        items (:items shops)
+
+
+        total (reduce + (map :price (mapcat :items shops)))]
 
     (is (= total 60930))))
