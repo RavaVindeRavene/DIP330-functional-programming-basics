@@ -21,9 +21,6 @@
   ; Calculate the sum of the prices for all the items in all shops by using (flatten ...)
   ;; Don't forget about (apply ...)
   (let [shops (:shops mall)
-        items (:items shops)
-
-
         total (reduce + (map :price (mapcat :items shops)))]
 
     (is (= total 60930))))
