@@ -7,8 +7,7 @@
   ; Calculate the average of customer ages by using your own (avg ...)
   ;; Don't forget about (apply ...)
   (let [customers (:customers mall)
-        avg-age ( )
-        ]
+        avg-age   ( / (reduce + (seq (map :age customers))) (count (map :age customers)) ) ]
 
     (is (= avg-age (rationalize 28.7)))))
 

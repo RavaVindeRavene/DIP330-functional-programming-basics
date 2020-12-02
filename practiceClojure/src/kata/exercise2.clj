@@ -35,7 +35,7 @@
 
   ; Create a sequence with distinct age values
   (let [ customers (:customers mall)
-        customer-ages (distinct (vec (map :age customers)))]
+        customer-ages (distinct (seq (map :age customers)))]
 
     (is (= (count customer-ages) 9))
     (is (= (set customer-ages) #{22, 27, 28, 26, 32, 35, 21, 36, 38}))))
