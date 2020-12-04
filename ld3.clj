@@ -1,6 +1,10 @@
 ;; 1. Find the last element of a list.
 (defn my-last [xs]
-  (first(reverse xs)))
+ (if (empty? (rest xs))
+    (first xs)
+    (my-last(rest xs))
+ )
+)
 
 (assert (= :d
            (my-last '(:a :b :c :d))))
@@ -30,9 +34,8 @@
 
 ;; 4. Reverse a list.
 (defn my-reverse [xs]
-  (if (empty? xs)
-   '()
-   (into '() xs)
+  (if (not-empty xs)
+   (cons (last xs)(my-reverse(butlast xs)))
   )
 )
 
@@ -40,11 +43,14 @@
            (my-reverse '(:a :b :c :d))))
 
 ;; 5. Find out whether a list is a palindrome.
+
 (defn is-palindrome? [xs]
-  (if (string? xs) 
-      (= xs (apply str (reverse xs)))
-      (= xs (reverse xs))
-  ) 
+  (if (not-empty xs) 
+      (if (= (first xs) (last xs)) 
+          (is-palindrome? (butlast(rest xs)))
+      )
+    true
+  )
 )
 
 (assert (= true
@@ -52,34 +58,40 @@
 
 ;; 6. Duplicate the elements of a list.
 (defn duplicate [xs]
- 
-      (flatten
-        (for [curr-elem xs]
-          (repeat 2 curr-elem)
-        )
+  ( if (not-empty xs)
+      (cons (first xs)
+          (cons (first xs) 
+                (duplicate (rest xs))
+          )
       )
-   )
+  )
+)
 
 (assert (= '(:a :a :b :b :c :c)
            (duplicate '(:a :b :c))))
 
 ;; 7. Eliminate consecutive duplicates of a list.
+;;it works only if the element repeats next to it like in the given example
 (defn compress [xs]
- (distinct xs) ;; had no luck here
-)
+  (if (empty? xs)
+    '()
+    (if (not= (first xs)(first(next xs)))
+          (cons (first xs) (compress(rest xs)))
+          (compress (rest xs))
 
+    )
+  )
+)
 (assert (= '(:a :b :c)
            (compress '(:a :a :b :b :c :c))))
 
 ;; 8. Remove the N-th element of a list
 (defn remove-at [xs n]
-    (when (seq xs)
-      (concat 
-      (take n xs)
-      (drop (inc n) xs)
-  ))
+    (if (= n 0)
+    (rest xs)
+    (cons (first xs)(remove-at (rest xs) (dec n)))
+  )
 )
-
 
 (assert (= '(:a :b :d :e)
            (remove-at '(:a :b :c :d :e) 2)))
@@ -88,8 +100,8 @@
 (defn insert-at [x xs n]
    (when (seq xs)
       (if (= n 0)
-        (conj xs x )
-        (concat (take n xs)  (conj (drop n xs) x))
+        (cons x xs )
+        (cons (first xs)(insert-at x (rest xs) (dec n)))
       )
    )
 )
@@ -100,44 +112,43 @@
 
 ;; 10. Create a list containing all integers within a given range.
 (defn my-range [a b]
-   (take (+ 1 (- b a)) 
-	(iterate inc a))
+   (if (not= (- b a) -1)
+    ( cons a (my-range (inc a) b))
+   )
 )
-
 (assert (= '(3 4 5 6 7)
            (my-range 3 7)))
 
 ;; 11. Concatenate two lists
 (defn my-concat [xs ys]
-    (distinct (into ys (reverse xs)))
+  ( if (empty? xs)
+    ys
+    (cons (first xs) (my-concat (next xs) ys)) 
+  )
 )
-
 (assert (= '(:a :b :c :d :e :f)
            (my-concat '(:a :b :c) '(:d :e :f))))
 
 ;; 12. Split a list into two parts; the length of the first part is given.
 (defn my-drop [xs n]
-  ( when (seq xs)
     (if (= (- n 1) 0)
       (rest xs)
     (recur (rest xs) (dec n)) 
     )
   )
-)
+
 
 (assert (= '(:d :e)
            (my-drop '(:a :b :c :d :e) 3)))
 
 ;; 13. Split a list into two parts; the length of the first part is given.
 (defn my-take [xs n]
-   ( when (seq xs) 
-      (if (< n (count xs) )
-        (recur (butlast xs) n)
-      xs
-      )  
-    )
+      (if (not-empty xs)
+        (if (= n 0)
+        '()
+        (cons (first xs) (my-take (rest xs) (dec n))) )
+      )
 )
-
 
 (assert (= '(:a :b :c)
            (my-take '(:a :b :c :d :e) 3)))
@@ -146,9 +157,7 @@
 (defn my-filter [p xs]
   (when (seq xs)
     (if (p (first xs))
-        (cons (first xs)
-          (my-filter p (next xs)))
-    ;;else:
+        (cons (first xs) (my-filter p (next xs)))
     (my-filter p (next xs))
     )
   )
@@ -159,9 +168,8 @@
 
 ;; 15. Implement the mapping function
 (defn my-map [m xs]
-  (when (seq xs)
-    (cons (m (first xs))
-      (my-map m (next xs))
+  (if (seq xs)
+    (cons (m (first xs)) (my-map m (next xs))
     )
   )
 )
@@ -172,8 +180,7 @@
 ;; 16. Implement the reducing function
 (defn my-reduce [f acc xs]
   (if (seq xs)
-	(f (first xs) (my-reduce f acc (next xs))
-    )acc)
+	(f (first xs) (my-reduce f acc (next xs)))acc)
 )
 
 (assert (= 15
@@ -183,9 +190,9 @@
 (defn my-flatten [xs] 
   (loop [list1 xs, list2 `()]
     (cond (sequential? (first list1)) 
-      (recur (concat (first list1) (rest list1)) list2)
+      (recur (my-concat(first list1) (rest list1)) list2)
         (empty? list1) 
-            (reverse list2)
+            (my-reverse list2)
       :else (recur (rest list1) (cons (first list1) list2))
     )
   )
