@@ -6,7 +6,11 @@
 
   ; Implement a custom function joining a seq of customer names into csv,
   ;;  by combining (reduce ...) (partial ...) and (join ...)
-  (let [joiner (fn [xs] "")
+  (let [joiner (fn [xs]
+                 (reduce  (first xs)
+                         )
+
+                 )
         csv (joiner (:customers mall))]
 
     (is (= csv "Joe,Steven,Patrick,Diana,Chris,Kathy,Alice,Andrew,Martin,Amy"))))

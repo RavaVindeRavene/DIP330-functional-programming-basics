@@ -18,9 +18,15 @@
   ; Create a customers' name list including who are having enough money to buy all items they want which is on sale.
   ; Items that are not for sale can be counted as 0 money cost.
   ; If there are multiple items with the same names, but different prices, customer will choose the cheapest one.
-  (let [
-        shops_have (mapcat :items (:shops mall))
-        richies []
+  (let [customers (:customers mall)
+        shops_have (sort-by last (flatten (map  :items (:shops mall)))) ;;store items sakartoti pec cenas augosa secibaa
+        ; :budget >= sum (item price)        if (>= (map :budget customers) (sum (KAUTKAS TE AR)))  cons(map :name (first customer))
+        ; if   ( map :name (map :wants-to-buy customers)) = :name shops_have
+        ; then  sort  :price items     take (first xs)    sort-by last (will sor then by the price value)
+
+
+
+        richies (vec  shops_have)
 
         ]
 
