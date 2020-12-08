@@ -23,10 +23,13 @@
         ; :budget >= sum (item price)        if (>= (map :budget customers) (sum (KAUTKAS TE AR)))  cons(map :name (first customer))
         ; if   ( map :name (map :wants-to-buy customers)) = :name shops_have
         ; then  sort  :price items     take (first xs)    sort-by last (will sor then by the price value)
+        ;if names are equal sum summa+price
+        ;(foreach i list expression)
 
+        ; (map :name (:wants-to-buy (first customers))) <-atgriež sarakastu ar customers want to buy itmes names
+        ;(foreach i (map :name (:wants-to-buy (first customers))) ())
 
-
-        richies (vec  shops_have)
+        richies (map :name (:wants-to-buy (first customers)))
 
         ]
 
