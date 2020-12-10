@@ -13,23 +13,28 @@
 
     (is (= not-for-sale #{"bag", "pants", "coat"}))))
 
+(defn wanted-total [wishlist pricelist]
+  (reduce + (map #( pricelist (:name %) 0) wishlist)))
+
+(defn all-items [shops]
+  (flatten (map :items shops)))
+
+(defn build-price-list [shops]
+  (into {}
+  (map (fn [item]{(:name item)(:price item)})(all-items shops))))
+
+(defn rich-enough? [pricelist customer]
+  (>= (:budget customer)( wanted-total (:wants-to-buy customer) pricelist)))
+
 (testing "I see it, I like it, I want it, I got it "
 
   ; Create a customers' name list including who are having enough money to buy all items they want which is on sale.
   ; Items that are not for sale can be counted as 0 money cost.
   ; If there are multiple items with the same names, but different prices, customer will choose the cheapest one.
   (let [customers (:customers mall)
-        shops_have (sort-by last (flatten (map  :items (:shops mall)))) ;;store items sakartoti pec cenas augosa secibaa
-        ; :budget >= sum (item price)        if (>= (map :budget customers) (sum (KAUTKAS TE AR)))  cons(map :name (first customer))
-        ; if   ( map :name (map :wants-to-buy customers)) = :name shops_have
-        ; then  sort  :price items     take (first xs)    sort-by last (will sor then by the price value)
-        ;if names are equal sum summa+price
-        ;(foreach i list expression)
-
-        ; (map :name (:wants-to-buy (first customers))) <-atgriež sarakastu ar customers want to buy itmes names
-        ;(foreach i (map :name (:wants-to-buy (first customers))) ())
-
-        richies (map :name (:wants-to-buy (first customers)))
+        price-list (build-price-list(:shops mall))
+        rich-enough-customers (filter #(rich-enough? price-list %) customers)
+        richies (map :name rich-enough-customers)
 
         ]
 
