@@ -11,7 +11,7 @@
 		false)
 )
 ;length=count message
-
+;rows 0 1 2...
 (defn calculate-index [length key]
 	(def current-row 0)
 	(def go-row-down false) ;for direction
@@ -34,8 +34,6 @@
 	)
 
 )
-;returns a vector of index and the char of string/message
-; from [0 1 2 3 4 5] to something like [0 11 22 13 4 15]
 
 
 (defn zipmap-encrypt-chars [message key]
